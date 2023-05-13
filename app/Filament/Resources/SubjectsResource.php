@@ -20,7 +20,9 @@ class SubjectsResource extends Resource
 {
     protected static ?string $model = Subjects::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-folder-open';
+    protected static ?string $navigationGroup = 'Courses';
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
@@ -45,9 +47,8 @@ class SubjectsResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('course_id'),
+                Tables\Columns\TextColumn::make('course.name'),
                 Tables\Columns\TextColumn::make('yearLevel.name'),
-
                 Tables\Columns\TextColumn::make('semester.name'),
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('created_at')
@@ -60,6 +61,7 @@ class SubjectsResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -77,6 +79,7 @@ class SubjectsResource extends Resource
     {
         return [
             'index' => Pages\ListSubjects::route('/'),
+            'view' => Pages\ViewSubject::route('/{record}'),
             //'create' => Pages\CreateSubjects::route('/create'),
             //'edit' => Pages\EditSubjects::route('/{record}/edit'),
         ];

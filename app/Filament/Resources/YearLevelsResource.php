@@ -17,7 +17,9 @@ class YearLevelsResource extends Resource
 {
     protected static ?string $model = Year_levels::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar';
+    protected static ?string $navigationGroup = 'Timeline';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

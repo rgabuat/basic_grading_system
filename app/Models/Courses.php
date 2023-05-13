@@ -13,5 +13,15 @@ class Courses extends Model
         'name','abbv'
     ];
 
+    public function Student_semester()
+    {
+        return $this->belongsToMany(Student_semester::class);
+    }
+
+    public function students()
+    {
+        return $this->hasOne(Student_semester::class);
+    }
+
     
 }

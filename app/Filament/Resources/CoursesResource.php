@@ -16,8 +16,11 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class CoursesResource extends Resource
 {
     protected static ?string $model = Courses::class;
+    protected static ?string $recordTitleAttribute = 'email';
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-folder-open';
+    protected static ?string $navigationGroup = 'Courses';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -48,6 +51,8 @@ class CoursesResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -57,7 +62,7 @@ class CoursesResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+             RelationManagers\StudentsRelationManager::class,
         ];
     }
     
@@ -65,6 +70,8 @@ class CoursesResource extends Resource
     {
         return [
             'index' => Pages\ListCourses::route('/'),
+            'view' => Pages\ViewCourse::route('/{record}'),
+
             //'create' => Pages\CreateCourses::route('/create'),
             //'edit' => Pages\EditCourses::route('/{record}/edit'),
         ];

@@ -10,19 +10,33 @@ class Students extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'course_id',
-       
+        'fname',
+        'lname',
+        'mname',
+        'gender',
+        'dob',
+        'email',
+        'address',
+        'phone_number',
+        'parent_name',
+        'parent_email',
+        'parent_address',
+        'parent_phone_number',
+        
     ];
 
 
-    public function course()
+    public function courses()
     {
-        return $this->belongsTo(Course::class);
+        return $this->hasOne(Student_semester::class);
     }
 
     public function semesters()
     {
         return $this->belongsToMany(Semester::class);
+    }
+
+    public function studentSemester(){
+        return $this->hasOne(Student_semester::class);
     }
 }

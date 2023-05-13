@@ -17,7 +17,9 @@ class GradingPeriodResource extends Resource
 {
     protected static ?string $model = GradingPeriod::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar';
+    protected static ?string $navigationGroup = 'Timeline';
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

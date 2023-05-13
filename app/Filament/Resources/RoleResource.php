@@ -60,6 +60,8 @@ class RoleResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -80,6 +82,8 @@ class RoleResource extends Resource
             'index' => Pages\ListRoles::route('/'),
             // 'create' => Pages\CreateRole::route('/create'),
             'edit' => Pages\EditRole::route('/{record}/edit'),
+            'view' => Pages\ViewRole::route('/{record}'),
+
         ];
     }    
 }

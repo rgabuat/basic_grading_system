@@ -17,7 +17,9 @@ class SemestersResource extends Resource
 {
     protected static ?string $model = Semesters::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar';
+    protected static ?string $navigationGroup = 'Timeline';
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {

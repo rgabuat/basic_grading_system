@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('student_semesters', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('students_id');
+            $table->unsignedBigInteger('courses_id');
             $table->unsignedBigInteger('semester_id');
             $table->unsignedBigInteger('year_level_id');
             $table->timestamps();
 
-            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+            $table->foreign('students_id')->references('id')->on('students')->onDelete('cascade');
+            $table->foreign('courses_id')->references('id')->on('courses')->onDelete('cascade');
             $table->foreign('semester_id')->references('id')->on('semesters')->onDelete('cascade');
             $table->foreign('year_level_id')->references('id')->on('year_levels')->onDelete('cascade');
         

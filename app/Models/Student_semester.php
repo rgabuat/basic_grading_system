@@ -9,15 +9,23 @@ class Student_semester extends Model
 {
     use HasFactory;
 
+    protected $table ="student_semesters";
+
     protected $fillable = [
-        'student_id',
+        'students_id',
+        'courses_id',
         'semester_id',
         'year_level_id',
     ];
 
     public function student()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Students::class);
+    }
+
+    public function courses()
+    {
+        return $this->belongsTo(Courses::class);
     }
 
     public function semester()
