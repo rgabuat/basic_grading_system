@@ -2,11 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
+use App\Filament\Resources\TeacherResource\Pages;
+use App\Filament\Resources\TeacherResource\RelationManagers;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -14,21 +12,20 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
 
-class UserResource extends Resource
+class TeacherResource extends Resource
 {
     protected static ?string $model = User::class;
-    protected static ?string $recordTitleAttribute = 'fname';
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?string $navigationGroup = 'User Management';
-    protected static ?int $navigationSort = 1;
+    protected static ?string $modelLabel = 'Teachers';
+    protected static ?string $slug = 'teachers'; 
+    protected static ?string $navigationLabel = 'Teachers';
+    protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                //
                 Forms\Components\TextInput::make('name')
                     ->label('Firstname')
                     ->required()
@@ -40,8 +37,6 @@ class UserResource extends Resource
                 Forms\Components\DatePicker::make('dob')
                     ->label('Date of Birth')
                     ->format('Y-m-d'),
-                Forms\Components\Toggle::make('is_admin')
-                    ->required(),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
@@ -56,11 +51,6 @@ class UserResource extends Resource
                     ->label('Role')
                     ->relationship('roles','name')
                     ->required(),
-                // Forms\Components\Select::make('roles')
-                // ->label('Role')
-                // ->options(Role::all()->pluck('name', 'id'))
-                // ->searchable()
-
             ]);
     }
 
@@ -68,6 +58,7 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
+                //
                 Tables\Columns\TextColumn::make('name')
                     ->label('Firstname')
                     ->sortable()
@@ -78,9 +69,6 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('dob')
                     ->label('Date of Birth')
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\BooLeanCOlumn::make('is_admin')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('roles.name')
@@ -107,8 +95,6 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -119,16 +105,26 @@ class UserResource extends Resource
     {
         return [
             //
-            RelationManagers\RolesRelationManager::class,
         ];
     }
     
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            // 'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => Pages\ListTeachers::route('/'),
+            'create' => Pages\CreateTeacher::route('/create'),
+            'edit' => Pages\EditTeacher::route('/{record}/edit'),
         ];
     }    
+
+    public static function getEloquentQuery(): Builder 
+    {
+        $query = parent::getEloquentQuery();
+
+        $query->whereHas('roles', function ($query) {
+            $query->where('name', 'teacher');
+        });
+
+        return $query;
+    }
 }

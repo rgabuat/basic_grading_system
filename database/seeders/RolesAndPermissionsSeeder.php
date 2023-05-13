@@ -97,8 +97,10 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // CREATE ADMINS & USERS
         User::create([
-            'name' => 'super admin',
+            'name' => 'Super',
+            'lname' => 'Admin',
             'is_admin' => 1,
+            'dob' => '2023-05-13',
             'email' => 'super@admin.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
@@ -106,8 +108,10 @@ class RolesAndPermissionsSeeder extends Seeder
         ])->assignRole($superAdminRole);
 
         User::create([
-            'name' => 'admin',
+            'name' => 'Admin',
+            'lname' => 'User',
             'is_admin' => 1,
+            'dob' => '2023-05-13',
             'email' => 'admin@admin.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
@@ -115,9 +119,11 @@ class RolesAndPermissionsSeeder extends Seeder
         ])->assignRole($adminRole);
 
         User::create([
-            'name' => 'teacher',
-            'is_admin' => 1,
-            'email' => 'moderator@admin.com',
+            'name' => 'John',
+            'lname' => 'Smith',
+            'is_admin' => 0,
+            'dob' => '2023-05-13',
+            'email' => 'teacher@admin.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
