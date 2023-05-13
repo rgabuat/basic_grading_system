@@ -15,7 +15,7 @@ class GradingPeriodSeeder extends Seeder
     {
         //
         $yearLvls = [
-            'Perlim',
+            'Prelim',
             'Midterm',
             'Finals',
         ];
