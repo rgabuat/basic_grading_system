@@ -69,6 +69,7 @@ class RolesAndPermissionsSeeder extends Seeder
             $adminPermission2,
             $userPermission1,
         ]);
+
         $adminRole = Role::create(['name' => 'admin'])->syncPermissions([
             $userPermission1,
             $userPermission2,
@@ -86,15 +87,13 @@ class RolesAndPermissionsSeeder extends Seeder
             $adminPermission2,
             $userPermission1,
         ]);
-        $moderatorRole = Role::create(['name' => 'moderator'])->syncPermissions([
+        $moderatorRole = Role::create(['name' => 'teacher'])->syncPermissions([
             $userPermission2,
             $rolePermission2,
             $permission2,
             $adminPermission1,
         ]);
-        $developerRole = Role::create(['name' => 'developer'])->syncPermissions([
-            $adminPermission1,
-        ]);
+
 
         // CREATE ADMINS & USERS
         User::create([
@@ -116,7 +115,7 @@ class RolesAndPermissionsSeeder extends Seeder
         ])->assignRole($adminRole);
 
         User::create([
-            'name' => 'moderator',
+            'name' => 'teacher',
             'is_admin' => 1,
             'email' => 'moderator@admin.com',
             'email_verified_at' => now(),
@@ -124,24 +123,5 @@ class RolesAndPermissionsSeeder extends Seeder
             'remember_token' => Str::random(10),
         ])->assignRole($moderatorRole);
 
-        User::create([
-            'name' => 'developer',
-            'is_admin' => 1,
-            'email' => 'developer@admin.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('password'),
-            'remember_token' => Str::random(10),
-        ])->assignRole($developerRole);
-
-        for ($i=1; $i < 50; $i++) {
-            User::create([
-                'name' => 'Test '.$i,
-                'is_admin' => 0,
-                'email' => 'test'.$i.'@test.com',
-                'email_verified_at' => now(),
-                'password' => Hash::make('password'), // password
-                'remember_token' => Str::random(10),
-            ])->assignRole($userRole);
-        }
     }
 }
