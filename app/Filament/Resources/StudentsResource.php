@@ -116,6 +116,7 @@ class StudentsResource extends Resource
             ->filters([
                 SelectFilter::make('id')
                 ->options(Courses::all()->pluck('name', 'id')),
+                
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
