@@ -16,4 +16,13 @@ class EditSubjects extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+    protected function getRedirectUrl():string 
+    {
+        return route(name:'filament.resources.courses.index');
+    }
+
+    protected function getCreatedNotificationTitle(): ?string 
+    {
+        return 'Subject Successfully Edited';
+    }
 }

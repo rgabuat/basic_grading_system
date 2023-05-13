@@ -24,11 +24,13 @@ class SubjectsResource extends Resource
     protected static ?string $navigationGroup = 'Courses';
     protected static ?int $navigationSort = 2;
 
+
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('course_id')
+                Forms\Components\Select::make('courses_id')
                     ->label('Course')
                     ->options(Courses::all()->pluck('name', 'id')),
                 Forms\Components\Select::make('year_level_id')
@@ -47,21 +49,18 @@ class SubjectsResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('course.name'),
-                Tables\Columns\TextColumn::make('yearLevel.name'),
-                Tables\Columns\TextColumn::make('semester.name'),
                 Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('course'),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
+                ->since(),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime(),
+                    ->since(),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -79,9 +78,11 @@ class SubjectsResource extends Resource
     {
         return [
             'index' => Pages\ListSubjects::route('/'),
-            'view' => Pages\ViewSubject::route('/{record}'),
-            //'create' => Pages\CreateSubjects::route('/create'),
+            'subjects' => Pages\ListSubjects::route('/{record}'), 
+            // 'create' => Pages\CreateSubjects::route('/create'),
             //'edit' => Pages\EditSubjects::route('/{record}/edit'),
         ];
-    }    
+    }
+    
+   
 }

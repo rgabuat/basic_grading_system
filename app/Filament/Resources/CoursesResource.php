@@ -51,25 +51,25 @@ class CoursesResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                 Tables\Actions\EditAction::make(),
+                 Tables\Actions\ViewAction::make(),
+
 
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ])
             ->prependActions([
-                Tables\Actions\Action::make('View Students')
-                    ->color('success')
-                    ->icon('heroicon-s-view-list')
-                    ->url(fn (Courses $record): string => StudentsResource::getUrl('students', ['record' => $record]))
+              
             ]);
     }
     
     public static function getRelations(): array
     {
         return [
-             RelationManagers\StudentsRelationManager::class,
+            RelationManagers\StudentsRelationManager::class,
+            RelationManagers\SubjectsRelationManager::class,
+
         ];
     }
     
@@ -78,9 +78,7 @@ class CoursesResource extends Resource
         return [
             'index' => Pages\ListCourses::route('/'),
             'view' => Pages\ViewCourse::route('/{record}'),
-
-            //'create' => Pages\CreateCourses::route('/create'),
-            //'edit' => Pages\EditCourses::route('/{record}/edit'),
+            'edit' => Pages\EditCourses::route('/{record}/edit'),
         ];
     }    
 }

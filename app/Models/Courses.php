@@ -20,7 +20,12 @@ class Courses extends Model
 
     public function students()
     {
-        return $this->hasOne(Student_semester::class);
+        return $this->hasMany(Students::class);
+    }
+
+    public function subjects()
+    {
+        return $this->hasMany(Subjects::class);
     }
 
     
