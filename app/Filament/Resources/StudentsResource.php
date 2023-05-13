@@ -8,7 +8,6 @@ use App\Models\Students;
 use App\Models\Courses;
 use App\Models\Year_levels;
 use App\Models\Semesters;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -22,17 +21,27 @@ class StudentsResource extends Resource
     protected static ?string $model = Students::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
-    protected static ?string $slug = 'courses/students';
-    protected static bool $shouldRegisterNavigation = false; 
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Grid::make(3)
                     ->schema([
+                        Forms\Components\Fieldset::make('Enrollment Details')
+                        ->schema([
+                            Forms\Components\Select::make('courses_id')
+                            ->label('Course')
+                            ->options(Courses::all()->pluck('name', 'id')),
+                            Forms\Components\Select::make('year_level_id')
+                                ->label('Year Level')
+                                ->options(Year_levels::all()->pluck('name', 'id')),
+                            Forms\Components\Select::make('semester_id')
+                                ->label('Semester')
+                                ->options(Semesters::all()->pluck('name', 'id')),
+                        ])->columns(3),
                         Forms\Components\Fieldset::make('Student Information')
                             ->schema([
-                            
                             Forms\Components\TextInput::make('fname')
                                 ->label('First Name')
                                 ->required()
@@ -64,7 +73,6 @@ class StudentsResource extends Resource
                             Forms\Components\TextInput::make('address')
                                 ->required()
                                 ->maxLength(255),
-                        
                         ])
                         ->columns(3),
                         Forms\Components\Fieldset::make('Guardian Information')
@@ -83,24 +91,9 @@ class StudentsResource extends Resource
                                 ->tel()
                                 ->required()
                                 ->maxLength(255),
-                            Forms\Components\Select::make('course_id')
-                                ->label('Course')
-                                ->options(Courses::all()->pluck('name', 'id'))
-                        ])
-                        ->columns(3)
+                        ])->columns(3),
                     ])->columns(3),
-                    Forms\Components\Fieldset::make('Enrollment Details')
-                        ->schema([
-                            Forms\Components\Select::make('courses_id')
-                            ->label('Course')
-                            ->options(Courses::all()->pluck('name', 'id')),
-                            Forms\Components\Select::make('year_level_id')
-                                ->label('Year Level')
-                                ->options(Year_levels::all()->pluck('name', 'id')),
-                            Forms\Components\Select::make('semester_id')
-                                ->label('Semester')
-                                ->options(Semesters::all()->pluck('name', 'id')),
-                        ])->columns(3)->relationship("studentSemester")
+                    
             ]);
     }
 
@@ -108,7 +101,6 @@ class StudentsResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('studentSemester.courses.name'),
                 Tables\Columns\TextColumn::make('lname')->label('Last Name'),
                 Tables\Columns\TextColumn::make('fname')->label('First Name'),
                 Tables\Columns\TextColumn::make('email'),
@@ -118,8 +110,6 @@ class StudentsResource extends Resource
                     ->dateTime(),
             ])
             ->filters([
-                SelectFilter::make('id')
-                ->options(Courses::all()->pluck('name', 'id')),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -142,14 +132,8 @@ class StudentsResource extends Resource
     {
         return [
             'index' => Pages\ListStudents::route('/'),
-            'students' => Pages\ListStudents::route('/{record}'), 
-            'create' => Pages\CreateStudents::route('/{record}/create'),
+            'create' => Pages\CreateStudents::route('/create'),
             'edit' => Pages\EditStudents::route('/{record}/edit'),
         ];
     }    
-
-    public static function getEloquentQuery(): Builder 
-    {
-        return parent::getEloquentQuery()->where('course_id', request('record'));
-    } 
 }

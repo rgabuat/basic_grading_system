@@ -23,13 +23,15 @@ class Students extends Model
         'parent_email',
         'parent_address',
         'parent_phone_number',
-        
+        'courses_id',
+        'year_level_id',
+        'semester_id',
     ];
 
 
     public function courses()
     {
-        return $this->hasOne(Student_semester::class);
+        return $this->belongsTo(Courses::class);
     }
 
     public function semesters()

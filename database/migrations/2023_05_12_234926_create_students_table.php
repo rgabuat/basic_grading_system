@@ -17,6 +17,9 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->string('fname');
+            $table->unsignedBigInteger('courses_id');
+            $table->unsignedBigInteger('semester_id');
+            $table->unsignedBigInteger('year_level_id');
             $table->string('lname');
             $table->string('mname')->nullable();
             $table->string('gender');
@@ -29,14 +32,9 @@ return new class extends Migration
             $table->string('parent_address');
             $table->string('parent_phone_number');
             $table->timestamps();
-      
-        });
-
-        Schema::create('courses_students', function(Blueprint $table){
-            $table->id();
-            $table->foreignIdFor(Students::class);
-            $table->foreignIdFor(Courses::class);
-            $table->timestamps();
+            $table->foreign('courses_id')->references('id')->on('courses')->onDelete('cascade');
+            $table->foreign('semester_id')->references('id')->on('semesters')->onDelete('cascade');
+            $table->foreign('year_level_id')->references('id')->on('year_levels')->onDelete('cascade');
 
         });
     }
