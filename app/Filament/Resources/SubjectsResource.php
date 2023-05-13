@@ -5,7 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\SubjectsResource\Pages;
 use App\Filament\Resources\SubjectsResource\RelationManagers;
 use App\Models\Subjects;
+use Spatie\Permission\Models\Role;
 use App\Models\Courses;
+use App\Models\User;
 use App\Models\Year_levels;
 use App\Models\Semesters;
 use Filament\Forms;
@@ -25,7 +27,6 @@ class SubjectsResource extends Resource
     protected static ?int $navigationSort = 2;
 
 
-
     public static function form(Form $form): Form
     {
         return $form
@@ -33,6 +34,9 @@ class SubjectsResource extends Resource
                 Forms\Components\Select::make('courses_id')
                     ->label('Course')
                     ->options(Courses::all()->pluck('name', 'id')),
+                Forms\Components\Select::make('user_id')
+                    ->label('Teacher')
+                    ->options(Role::where('name', 'teacher')->firstOrFail()->users()->pluck('full_name', 'id')),
                 Forms\Components\Select::make('year_level_id')
                     ->label('Year Level')
                     ->options(Year_levels::all()->pluck('name', 'id')),
@@ -45,14 +49,16 @@ class SubjectsResource extends Resource
             ]);
     }
 
+    
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('course'),
+                Tables\Columns\TextColumn::make('user.full_name')
+                    ->label('Teacher'),
                 Tables\Columns\TextColumn::make('created_at')
-                ->since(),
+                    ->since(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->since(),
             ])

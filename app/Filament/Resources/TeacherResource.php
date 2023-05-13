@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\TeacherResource\Pages;
 use App\Filament\Resources\TeacherResource\RelationManagers;
 use App\Models\User;
+use App\Models\Subjects;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -94,6 +95,7 @@ class TeacherResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -105,6 +107,7 @@ class TeacherResource extends Resource
     {
         return [
             //
+            RelationManagers\SubjectsRelationManager::class,
         ];
     }
     
@@ -114,6 +117,7 @@ class TeacherResource extends Resource
             'index' => Pages\ListTeachers::route('/'),
             'create' => Pages\CreateTeacher::route('/create'),
             'edit' => Pages\EditTeacher::route('/{record}/edit'),
+            'view' => Pages\ViewSubjects::route('/{record}'),
         ];
     }    
 
