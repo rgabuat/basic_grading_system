@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
             SemesterSeeder::class,
             YearLevelSeeder::class,
+            GradingPeriodSeeder::class,
         ]);
 
     }
