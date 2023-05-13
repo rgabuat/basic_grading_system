@@ -8,7 +8,7 @@ use App\Models\Students;
 use App\Models\Courses;
 use App\Models\Year_levels;
 use App\Models\Semesters;
-
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -114,7 +114,8 @@ class StudentsResource extends Resource
                     ->dateTime(),
             ])
             ->filters([
-                //
+                SelectFilter::make('id')
+                ->options(Courses::all()->pluck('name', 'id')),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
