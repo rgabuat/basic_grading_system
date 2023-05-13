@@ -13,6 +13,7 @@ class Students extends Model
         'fname',
         'lname',
         'mname',
+        'course_id',
         'gender',
         'dob',
         'email',

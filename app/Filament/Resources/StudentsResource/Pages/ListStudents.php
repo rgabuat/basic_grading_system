@@ -13,7 +13,8 @@ class ListStudents extends ListRecords
     protected function getActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+            ->url(fn (): string => StudentsResource::getUrl('create', ['record' => request('record')])), 
         ];
     }
 }

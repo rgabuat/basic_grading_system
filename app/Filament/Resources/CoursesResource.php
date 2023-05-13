@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CoursesResource\Pages;
 use App\Filament\Resources\CoursesResource\RelationManagers;
+use App\Filament\Resources\StudentsResource;
 use App\Models\Courses;
 use Filament\Forms;
 use Filament\Resources\Form;
@@ -56,6 +57,12 @@ class CoursesResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+            ])
+            ->prependActions([
+                Tables\Actions\Action::make('View Students')
+                    ->color('success')
+                    ->icon('heroicon-s-view-list')
+                    ->url(fn (Courses $record): string => StudentsResource::getUrl('students', ['record' => $record]))
             ]);
     }
     

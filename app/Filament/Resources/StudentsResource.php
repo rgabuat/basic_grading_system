@@ -22,7 +22,8 @@ class StudentsResource extends Resource
     protected static ?string $model = Students::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
-
+    protected static ?string $slug = 'courses/students';
+    protected static bool $shouldRegisterNavigation = false; 
     public static function form(Form $form): Form
     {
         return $form
@@ -82,6 +83,9 @@ class StudentsResource extends Resource
                                 ->tel()
                                 ->required()
                                 ->maxLength(255),
+                            Forms\Components\Select::make('course_id')
+                                ->label('Course')
+                                ->options(Courses::all()->pluck('name', 'id'))
                         ])
                         ->columns(3)
                     ])->columns(3),
@@ -137,8 +141,14 @@ class StudentsResource extends Resource
     {
         return [
             'index' => Pages\ListStudents::route('/'),
-            'create' => Pages\CreateStudents::route('/create'),
+            'students' => Pages\ListStudents::route('/{record}'), 
+            'create' => Pages\CreateStudents::route('/{record}/create'),
             'edit' => Pages\EditStudents::route('/{record}/edit'),
         ];
     }    
+
+    public static function getEloquentQuery(): Builder 
+    {
+        return parent::getEloquentQuery()->where('course_id', request('record'));
+    } 
 }
