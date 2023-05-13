@@ -12,10 +12,22 @@ class Subjects extends Model
     protected $fillable = [
         'name',
         'course_id',
+        'year_level_id',
+        'semester_id'
     ];
 
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function yearLevel()
+    {
+        return $this->belongsTo(Year_levels ::class);
+    }
+
+    public function semester()
+    {
+        return $this->belongsTo(Semesters::class);
     }
 }
