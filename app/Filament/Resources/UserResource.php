@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -30,6 +32,8 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Toggle::make('is_admin')
+                    ->required(),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
@@ -39,6 +43,16 @@ class UserResource extends Resource
                     ->password()
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('roles')
+                    ->multiple()
+                    ->label('Role')
+                    ->relationship('roles','name')
+                    ->required(),
+                // Forms\Components\Select::make('roles')
+                // ->label('Role')
+                // ->options(Role::all()->pluck('name', 'id'))
+                // ->searchable()
+
             ]);
     }
 
@@ -47,6 +61,12 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\BooLeanCOlumn::make('is_admin')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('roles.name')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
@@ -82,6 +102,7 @@ class UserResource extends Resource
     {
         return [
             //
+            RelationManagers\RolesRelationManager::class,
         ];
     }
     
@@ -90,7 +111,7 @@ class UserResource extends Resource
         return [
             'index' => Pages\ListUsers::route('/'),
             // 'create' => Pages\CreateUser::route('/create'),
-            // 'edit' => Pages\EditUser::route('/{record}/edit'),
+            'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }    
 }
