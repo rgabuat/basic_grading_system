@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Support\Facades\Hash;
+use Filament\Pages\Page;
 
 class UserResource extends Resource
 {

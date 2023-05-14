@@ -6,9 +6,15 @@ namespace App\Providers;
 use App\Policies\PermissionPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
+use App\Policies\SemesterPolicy;
+use App\Policies\GradingPeriodPolicy;
+use App\Policies\YearLevelPolicy;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
+use App\Models\GradingPeriod;
+use App\Models\Semesters;
+use App\Models\Year_levels;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -23,6 +29,9 @@ class AuthServiceProvider extends ServiceProvider
         Permission::class => PermissionPolicy::class,
         Role::class => RolePolicy::class,
         User::class => UserPolicy::class,
+        Semesters::class => SemesterPolicy::class,
+        GradingPeriod::class => GradingPeriodPolicy::class,
+        Year_levels::class => YearLevelPolicy::class,
     ];
 
     /**

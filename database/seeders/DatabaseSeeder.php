@@ -23,6 +23,9 @@ class DatabaseSeeder extends Seeder
             SemesterSeeder::class,
             YearLevelSeeder::class,
             GradingPeriodSeeder::class,
+            CourseSeeder::class,
+            SubjectSeeder::class,
+            StudentSeeder::class,
         ]);
 
     }
