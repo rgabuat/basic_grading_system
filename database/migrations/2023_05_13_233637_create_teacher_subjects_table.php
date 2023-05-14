@@ -11,11 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('subjects', function (Blueprint $table) {
-            //
+        Schema::create('teacher_subjects', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('subject_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');
+            $table->timestamps();
         });
+
     }
 
     /**
@@ -23,8 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('subjects', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('teacher_subjects');
     }
 };

@@ -34,9 +34,6 @@ class SubjectsResource extends Resource
                 Forms\Components\Select::make('courses_id')
                     ->label('Course')
                     ->options(Courses::all()->pluck('name', 'id')),
-                Forms\Components\Select::make('user_id')
-                    ->label('Teacher')
-                    ->options(Role::where('name', 'teacher')->firstOrFail()->users()->pluck('full_name', 'id')),
                 Forms\Components\Select::make('year_level_id')
                     ->label('Year Level')
                     ->options(Year_levels::all()->pluck('name', 'id')),

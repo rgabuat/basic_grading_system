@@ -9,32 +9,22 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Models\Year_levels;
-use App\Models\Semesters;
-use App\Models\Courses;
+use App\Models\Subjects;
 
-class SubjectsRelationManager extends RelationManager
+
+class TeacherSubjectRelationManager extends RelationManager
 {
-    protected static string $relationship = 'subjects';
+    protected static string $relationship = 'TeacherSubject';
 
-    protected static ?string $recordTitleAttribute = 'name';
+    protected static ?string $recordTitleAttribute = 'user_id';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Select::make('courses_id')
-                    ->label('Year Level')
-                    ->options(courses::all()->pluck('name', 'id')),
-                Forms\Components\Select::make('year_level_id')
-                    ->label('Year Level')
-                    ->options(Year_levels::all()->pluck('name', 'id')),
-                Forms\Components\Select::make('semester_id')
-                    ->label('Semester')
-                    ->options(Semesters::all()->pluck('name', 'id')),
+                Forms\Components\Select::make('subject_id')
+                                ->label('Subject')
+                                ->options(Subjects::all()->pluck('name', 'id')),
             ]);
     }
 
@@ -42,7 +32,8 @@ class SubjectsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('subject.name'),
+
             ])
             ->filters([
                 //
