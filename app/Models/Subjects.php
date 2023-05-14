@@ -36,4 +36,13 @@ class Subjects extends Model
     {
         return $this->hasMany(TeacherSubject::class);
     }
+
+    public function scopeWhereDoesntHave($query, $relation)
+    {
+        $relatedTable = $this->$relation()->getRelated()->getTable();
+
+        return $query->whereDoesntHaveSubquery($relation, function ($query) use ($relatedTable) {
+            $query->from($relatedTable);
+        });
+    }
 }

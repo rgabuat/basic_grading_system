@@ -7,6 +7,7 @@ use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Models\Subjects;
@@ -20,12 +21,23 @@ class TeacherSubjectRelationManager extends RelationManager
 
     public static function form(Form $form): Form
     {
+
         return $form
             ->schema([
                 Forms\Components\Select::make('subject_id')
                                 ->label('Subject')
-                                ->options(Subjects::all()->pluck('name', 'id')),
-            ]);
+                                ->options(function (?Model $record){
+
+                                    $id = $record;
+                                    Subjects::whereNotIn('id', function ($query) use ($id) {
+                                        $query->select('subject_id')
+                                              ->from('teacher_subjects')
+                                              ->where('user_id','test',$id);
+                                            })->get();
+                                })
+                            ]);
+
+           
     }
 
     public static function table(Table $table): Table
