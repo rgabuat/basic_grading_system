@@ -43,17 +43,22 @@ class SubjectsResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('code')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
     
     public static function table(Table $table): Table
     {
+
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('user.full_name')
-                    ->label('Teacher'),
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Subject'),
+                Tables\Columns\TextColumn::make('code')
+                    ->label('Code'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->since(),
                 Tables\Columns\TextColumn::make('updated_at')
@@ -86,6 +91,7 @@ class SubjectsResource extends Resource
             //'edit' => Pages\EditSubjects::route('/{record}/edit'),
         ];
     }
+
     
    
 }

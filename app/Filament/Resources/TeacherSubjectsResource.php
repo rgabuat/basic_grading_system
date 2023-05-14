@@ -7,7 +7,7 @@ use App\Filament\Resources\TeacherSubjectsResource\RelationManagers;
 use App\Models\TeacherSubject;
 use App\Models\Subjects;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Auth;
 
 use Filament\Forms;
 use Filament\Resources\Form;
@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class TeacherSubjectsResource extends Resource
 {
     protected static ?string $model = TeacherSubject::class;
-    protected static bool $shouldRegisterNavigation = false; 
+
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
     public static function form(Form $form): Form
@@ -30,7 +30,7 @@ class TeacherSubjectsResource extends Resource
                 Forms\Components\Select::make('user_id')
                                 ->label('Teachers')
                                 ->options(User::all()->pluck('name', 'id')),
-                Forms\Components\Select::make('subject_id')
+                Forms\Components\Select::make('subjects_id')
                                 ->label('Subject')
                                 ->options(Subjects::all()->pluck('name', 'id')),
             ]);
@@ -41,6 +41,8 @@ class TeacherSubjectsResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('subject.name'),
+                Tables\Columns\TextColumn::make('teacher.email'),
+
                 
             ])
             ->filters([
@@ -57,7 +59,8 @@ class TeacherSubjectsResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\RequirementsRelationManager::class,
+            
         ];
     }
     
@@ -68,5 +71,17 @@ class TeacherSubjectsResource extends Resource
             'create' => Pages\CreateTeacherSubjects::route('/create'),
             'edit' => Pages\EditTeacherSubjects::route('/{record}/edit'),
         ];
-    }    
+    }  
+    
+    public static function getEloquentQuery(): Builder 
+    {
+        $query = parent::getEloquentQuery();
+
+        if (Auth::check() && Auth::user()->hasRole('admin')) {
+            // The user has the admin role
+        } else {
+            $query->where('user_id', auth()->user()->id);
+        }
+        return $query;
+    }
 }

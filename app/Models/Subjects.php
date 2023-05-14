@@ -11,6 +11,7 @@ class Subjects extends Model
 
     protected $fillable = [
         'name',
+        'code',
         'courses_id',
         'year_level_id',
         'semester_id'

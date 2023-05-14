@@ -7,47 +7,38 @@ use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Models\Subjects;
 
-
-class TeacherSubjectRelationManager extends RelationManager
+class ActivitiesRelationManager extends RelationManager
 {
-    protected static string $relationship = 'TeacherSubject';
+    protected static string $relationship = 'Activities';
 
     protected static ?string $recordTitleAttribute = 'user_id';
 
     public static function form(Form $form): Form
     {
-
         return $form
             ->schema([
-                Forms\Components\Select::make('subjects_id')
-                                ->label('Subject')
-                                ->options(function (?Model $record){
-
-                                    $id = $record;
-                                    Subjects::whereNotIn('id', function ($query) use ($id) {
-                                        $query->select('subject_id')
-                                              ->from('teacher_subjects')
-                                              ->where('user_id','test',$id);
-                                            })->get();
-                                })
-                            ]);
-
-           
+                Forms\Components\Select::make('type')
+                            ->options([
+                                'Recitation' => 'Recitation',
+                                'Homework' => 'Homework',
+                                'Quiz' => 'Quiz',
+                                'Exam' => 'Exam',
+                            ]),
+                Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255),
+            ]);
     }
 
     public static function table(Table $table): Table
     {
-
         return $table
             ->columns([
-                
-                Tables\Columns\TextColumn::make('subject.name'),
-
+                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('type'),
             ])
             ->filters([
                 //
