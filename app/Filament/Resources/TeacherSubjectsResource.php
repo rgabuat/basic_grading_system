@@ -51,6 +51,8 @@ class TeacherSubjectsResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+
+
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -71,6 +73,7 @@ class TeacherSubjectsResource extends Resource
             'index' => Pages\ListTeacherSubjects::route('/'),
             'create' => Pages\CreateTeacherSubjects::route('/create'),
             'edit' => Pages\EditTeacherSubjects::route('/{record}/edit'),
+
         ];
     }  
     

@@ -20,4 +20,9 @@ class Requirements extends Model
     {
         return $this->hasMany(TeacherSubject::class);
     }
+
+    public function Subject()
+    {
+        return $this->belongsTo(Subjects::class);
+    }
 }

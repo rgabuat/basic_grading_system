@@ -14,15 +14,11 @@ return new class extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('grading_periods_id');
             $table->unsignedBigInteger('subjects_id');
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('grading_periods_id')->references('id')->on('grading_periods')->onDelete('cascade');
             $table->foreign('subjects_id')->references('id')->on('subjects')->onDelete('cascade');
-
-
-
-       
         });
     }
 
