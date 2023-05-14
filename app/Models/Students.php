@@ -42,4 +42,9 @@ class Students extends Model
     public function studentSemester(){
         return $this->hasOne(Student_semester::class);
     }
+
+    public function subjects()
+    {
+        return $this->hasMany(Subjects::class);
+    }
 }
