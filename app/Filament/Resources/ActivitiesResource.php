@@ -68,8 +68,8 @@ class ActivitiesResource extends Resource
     {
         return [
             'index' => Pages\ListActivities::route('/'),
-            'create' => Pages\CreateActivities::route('/create'),
-            'edit' => Pages\EditActivities::route('/{record}/edit'),
+            // 'create' => Pages\CreateActivities::route('/create'),
+            // 'edit' => Pages\EditActivities::route('/{record}/edit'),
         ];
     }    
 }
