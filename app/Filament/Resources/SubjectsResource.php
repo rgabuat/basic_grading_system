@@ -17,6 +17,7 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class SubjectsResource extends Resource
 {
@@ -69,6 +70,8 @@ class SubjectsResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -78,7 +81,9 @@ class SubjectsResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\RequirementsRelationManager::class,
+            RelationManagers\ActivitiesRelationManager::class,
+
         ];
     }
     
@@ -87,9 +92,25 @@ class SubjectsResource extends Resource
         return [
             'index' => Pages\ListSubjects::route('/'),
             'subjects' => Pages\ListSubjects::route('/{record}'), 
+            'view' => Pages\ViewSubject::route('/{record}'),
+
             // 'create' => Pages\CreateSubjects::route('/create'),
             //'edit' => Pages\EditSubjects::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder 
+    {
+        $query = parent::getEloquentQuery();
+
+        if (Auth::check() && Auth::user()->hasRole('admin')) {
+            // The user has the admin role
+        } else {
+            $query->whereHas('TeacherSubject', function ($query1) {
+                $query1->where('user_id', auth()->user()->id );
+            });
+        }
+        return $query;
     }
 
     
