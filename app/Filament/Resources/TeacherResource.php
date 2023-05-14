@@ -108,9 +108,6 @@ class TeacherResource extends Resource
         return [
             //
             RelationManagers\TeacherSubjectRelationManager::class,
-            RelationManagers\ActivitiesRelationManager::class,
-            RelationManagers\GradesRelationManager::class,
-
 
 
         ];
