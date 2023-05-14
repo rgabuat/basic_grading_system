@@ -20,5 +20,10 @@ class Activities extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function requirements()
+    {
+        return $this->belongsTo(Requirements::class);
+    }
     
 }

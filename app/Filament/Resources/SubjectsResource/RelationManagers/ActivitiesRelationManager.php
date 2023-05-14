@@ -10,6 +10,8 @@ use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Models\GradingPeriod;
+use App\Models\Requirements;
+use Illuminate\Http\Request;
 
 class ActivitiesRelationManager extends RelationManager
 {
@@ -17,13 +19,24 @@ class ActivitiesRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'subjects_id';
 
-    public static function form(Form $form): Form
+    
+
+    public static function form(Form $form, Request $request = null): Form
     {
+
+
         return $form
             ->schema([
                 Forms\Components\Select::make('grading_periods_id')
                             ->label('Course')
                             ->options(GradingPeriod::all()->pluck('name', 'id')),
+                // Forms\Components\Select::make('requirements_id')
+                //             ->label('Course')
+                //             ->options(function(callable $get){
+                //                 Requirements::where('subjects_idd', $get('subjects_id'))->pluck('name', 'id');
+
+                //             }
+                //             ),
                 Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),

@@ -32,6 +32,11 @@ class Subjects extends Model
         return $this->belongsTo(Semesters::class);
     }
 
+    public function requirementsSubject()
+    {
+        return $this->belongsTo(requirements::class);
+    }
+
     public function requirements()
     {
         return $this->hasMany(Requirements::class);
