@@ -79,8 +79,8 @@ class GradesResource extends Resource
     {
         return [
             'index' => Pages\ListGrades::route('/'),
-            'create' => Pages\CreateGrades::route('/create'),
-            'edit' => Pages\EditGrades::route('/{record}/edit'),
+            // 'create' => Pages\CreateGrades::route('/create'),
+            // 'edit' => Pages\EditGrades::route('/{record}/edit'),
         ];
     }    
 }
