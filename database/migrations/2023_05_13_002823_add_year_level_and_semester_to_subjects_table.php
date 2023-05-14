@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreign('semester_id')->references('id')->on('semesters')->onDelete('cascade');
             $table->foreign('year_level_id')->references('id')->on('year_levels')->onDelete('cascade');
         });
+
+       
     }
 
     /**

@@ -13,7 +13,6 @@ class Subjects extends Model
         'name',
         'courses_id',
         'year_level_id',
-        'user_id',
         'semester_id'
     ];
 
@@ -32,8 +31,9 @@ class Subjects extends Model
         return $this->belongsTo(Semesters::class);
     }
 
-    public function user()
+
+    public function TeacherSubject()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(TeacherSubject::class);
     }
 }
