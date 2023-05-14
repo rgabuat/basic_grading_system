@@ -11,6 +11,7 @@ class Grades extends Model
 
     protected $fillable = [
         'student_id',
+        'user_id',
         'activity_id',
         'grading_period_id',
         'score',
@@ -25,6 +26,11 @@ class Grades extends Model
     public function activity()
     {
         return $this->belongsTo(Activity::class);
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function gradingPeriod()

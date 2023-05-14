@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('subjects', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('code');
             $table->unsignedBigInteger('courses_id');
             $table->timestamps();
             $table->foreign('courses_id')->references('id')->on('courses')->onDelete('cascade');

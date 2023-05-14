@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\TeacherResource\RelationManagers;
+namespace App\Filament\Resources\TeacherSubjectsResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Resources\Form;
@@ -9,34 +9,32 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Models\Subjects;
 
-
-class TeacherSubjectRelationManager extends RelationManager
+class RequirementsRelationManager extends RelationManager
 {
-    protected static string $relationship = 'TeacherSubject';
+    protected static string $relationship = 'Requirements';
+    protected static string $resource = TeacherSubjectsResource::class;
 
-    protected static ?string $recordTitleAttribute = 'user_id';
+    protected static ?string $recordTitleAttribute = 'subjects_id';
 
     public static function form(Form $form): Form
     {
-
         return $form
             ->schema([
-                Forms\Components\Select::make('subjects_id')
-                                ->label('Subject')
-                                ->options(Subjects::all()->pluck('name', 'id')),
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('percentage')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
     public static function table(Table $table): Table
     {
-
         return $table
             ->columns([
-                
-                Tables\Columns\TextColumn::make('subject.name'),
-
+                Tables\Columns\TextColumn::make('subjects_id'),
             ])
             ->filters([
                 //

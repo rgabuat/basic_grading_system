@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ActivitiesResource\Pages;
 use App\Filament\Resources\ActivitiesResource\RelationManagers;
 use App\Models\Activities;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -27,6 +28,9 @@ class ActivitiesResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('type')
                     ->required(),
+                Forms\Components\Select::make('user_id')
+                    ->label('Teachers')
+                    ->options(User::all()->pluck('name', 'id')),
             ]);
     }
 
