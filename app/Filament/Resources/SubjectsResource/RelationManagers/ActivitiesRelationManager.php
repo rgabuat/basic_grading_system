@@ -11,7 +11,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Models\GradingPeriod;
 use App\Models\Requirements;
+use App\Models\Subjects;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
+use Livewire\Component as Livewire;
+
 
 class ActivitiesRelationManager extends RelationManager
 {
@@ -23,24 +27,28 @@ class ActivitiesRelationManager extends RelationManager
 
     public static function form(Form $form, Request $request = null): Form
     {
+         
 
 
+ 
         return $form
             ->schema([
                 Forms\Components\Select::make('grading_periods_id')
-                            ->label('Course')
+                            ->label('Grading')
                             ->options(GradingPeriod::all()->pluck('name', 'id')),
-                // Forms\Components\Select::make('requirements_id')
-                //             ->label('Course')
-                //             ->options(function(callable $get){
-                //                 Requirements::where('subjects_idd', $get('subjects_id'))->pluck('name', 'id');
-
-                //             }
-                //             ),
+                Forms\Components\Select::make('requirements_id')
+                            ->label('Requirement')
+                            ->options(function (Livewire $livewire)
+                                {
+                                    return Requirements::where('subjects_id',$livewire->ownerRecord->id)->pluck('name', 'id');
+                                }
+                            ),
                 Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
             ]);
+
+            
     }
 
     public static function table(Table $table): Table
@@ -63,4 +71,8 @@ class ActivitiesRelationManager extends RelationManager
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }    
+
+    
+
+     
 }
