@@ -31,6 +31,8 @@ return new class extends Migration
             $table->string('parent_email');
             $table->string('parent_address');
             $table->string('parent_phone_number');
+            $table->string('full_name')->virtualAs('concat(fname, \' \', lname)');
+
             $table->timestamps();
             $table->foreign('courses_id')->references('id')->on('courses')->onDelete('cascade');
             $table->foreign('semester_id')->references('id')->on('semesters')->onDelete('cascade');

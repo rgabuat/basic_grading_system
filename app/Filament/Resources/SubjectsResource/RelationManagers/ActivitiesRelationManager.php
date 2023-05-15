@@ -70,6 +70,13 @@ class ActivitiesRelationManager extends RelationManager
                 {
                     return Requirements::where('subjects_id',$livewire->ownerRecord->id)->pluck('name', 'id');
                 })
+                ->attribute('requirements_id'),
+
+                SelectFilter::make('grading_periods_id')
+                ->options(function (Livewire $livewire)
+                {
+                    return GradingPeriod::pluck('name', 'id');
+                })
                 ->attribute('grading_periods_id')
             ])
             ->headerActions([

@@ -25,6 +25,9 @@ class SubjectsRelationManager extends RelationManager
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('code')
+                    ->required()
+                    ->maxLength(255),
                 Forms\Components\Select::make('year_level_id')
                     ->label('Year Level')
                     ->options(Year_levels::all()->pluck('name', 'id')),

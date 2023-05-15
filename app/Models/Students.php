@@ -39,6 +39,11 @@ class Students extends Model
         return $this->belongsToMany(Semester::class);
     }
 
+    public function gradingPeriod()
+    {
+        return $this->belongsTo(GradingPeriod::class);
+    }
+
     public function studentSemester(){
         return $this->hasOne(Student_semester::class);
     }
