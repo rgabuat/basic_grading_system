@@ -119,7 +119,7 @@ class TeacherResource extends Resource
             'index' => Pages\ListTeachers::route('/'),
             'create' => Pages\CreateTeacher::route('/create'),
             'edit' => Pages\EditTeacher::route('/{record}/edit'),
-            // 'view' => Pages\ViewSubjects::route('/{record}'),
+            'view' => Pages\ViewSubjects::route('/{record}'),
         ];
     }    
 

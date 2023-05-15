@@ -33,6 +33,7 @@ class StudentSubjects extends Page
         foreach ($students as $keyS => $student) {
             $student->gradingPeriod = GradingPeriod::get();
             $studentTotal = 0;
+        
             foreach ($student->gradingPeriod as $gp => $grading) {
                 $grading->requirements = Requirements::where('subjects_id', $record)->get();
                 $gradingPeriodTotal = 0;
@@ -41,32 +42,40 @@ class StudentSubjects extends Page
                     $requirementsTotal = 0;
                     $requirementsScore = 0;
                     $requirementsPercentage = 0;
-        
                     $requirements->activities = Activities::where('requirements_id', $requirements->id)->where('grading_periods_id', $grading->id)->get();
         
                     foreach ($requirements->activities as $key => $activities) {
-                        $requirementsTotal = $requirementsTotal + $activities->total;
+                        $requirementsTotal += $activities->total;
                         $requirements->total = $requirementsTotal;
         
                         $activities->grades = Grades::where('activity_id', $activities->id)->get();
         
                         foreach ($activities->grades as $key => $grades) {
                             $activities->score = $grades->score;
-                            $requirementsScore = $requirementsScore + $grades->score;
+                            $requirementsScore += $grades->score;
                             $requirements->score = $requirementsScore;
                             $requirementsPercentage = ($requirements->score / $requirements->total) * ($requirements->percentage / 100);
                             $requirements->totalPercentage = $requirementsPercentage;
                         }
                     }
         
-                    $gradingPeriodTotal = $gradingPeriodTotal + $requirementsPercentage;
+                    $gradingPeriodTotal += $requirementsPercentage;
                     $grading->total = $gradingPeriodTotal;
                 }
-                $studentTotal = $studentTotal +$gradingPeriodTotal;
-                $student->total = $studentTotal;
-
+        
+                if ($grading->name == 'Prelim' || $grading->name == 'Midterm') {
+                    $percent = 30;
+                } else {
+                    $percent = 40;
+                }
+        
+                $studentTotal += $gradingPeriodTotal ;
             }
+            
+            $student->total = $studentTotal * $percent;
         }
+        
+        
         $this->students=$students;
         //dd($students);
     }
