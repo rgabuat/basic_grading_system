@@ -22,6 +22,16 @@ class Subjects extends Model
         return $this->belongsTo(Courses::class);
     }
 
+    public function students()
+    {
+        return $this->belongsTo(Students::class);
+    }
+
+    public function grades()
+    {
+        return $this->hasMany(Grades::class);
+    }
+
     public function yearLevel()
     {
         return $this->belongsTo(Year_levels ::class);

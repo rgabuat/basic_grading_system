@@ -12,18 +12,21 @@ class Activities extends Model
     protected $fillable = [
         'name',
         'type',
-        'user_id',
-        'subjects_id'
-    ];
+        'subjects_id',
+        'grading_periods_id',
+        'requirements_id',
+        'total'
 
-    public function teacher()
-    {
-        return $this->belongsTo(User::class);
-    }
+    ];
 
     public function requirements()
     {
         return $this->belongsTo(Requirements::class);
+    }
+
+    public function gradingPeriod()
+    {
+        return $this->belongsTo(GradingPeriod::class, 'grading_periods_id');
     }
     
 }

@@ -18,9 +18,9 @@ use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
-
 class SubjectsResource extends Resource
 {
+
     protected static ?string $model = Subjects::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-folder-open';
@@ -83,9 +83,12 @@ class SubjectsResource extends Resource
         return [
             RelationManagers\RequirementsRelationManager::class,
             RelationManagers\ActivitiesRelationManager::class,
+            RelationManagers\GradesRelationManager::class,
+
 
         ];
     }
+
     
     public static function getPages(): array
     {

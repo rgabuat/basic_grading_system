@@ -10,22 +10,25 @@ class Grades extends Model
     use HasFactory;
 
     protected $fillable = [
-        'student_id',
-        'user_id',
+        'students_id',
         'activity_id',
-        'grading_period_id',
+        'subjects_id',
         'score',
-        'total',
     ];
 
     public function student()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Students::class,'students_id');
     }
 
     public function activity()
     {
-        return $this->belongsTo(Activity::class);
+        return $this->belongsTo(Activities::class,'activity_id');
+    }
+
+    public function subjects()
+    {
+        return $this->belongsTo(Subjects::class);
     }
 
     public function teacher()

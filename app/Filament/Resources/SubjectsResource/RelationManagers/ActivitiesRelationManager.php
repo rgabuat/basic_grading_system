@@ -15,7 +15,7 @@ use App\Models\Subjects;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component as Livewire;
-
+use Filament\Tables\Filters\SelectFilter;
 
 class ActivitiesRelationManager extends RelationManager
 {
@@ -46,6 +46,10 @@ class ActivitiesRelationManager extends RelationManager
                 Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
+                Forms\Components\TextInput::make('total')
+                            ->required()
+                            ->numeric()
+                            ->maxLength(255),
             ]);
 
             
@@ -55,10 +59,18 @@ class ActivitiesRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('subjects_id'),
+                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('total'),
+                Tables\Columns\TextColumn::make('requirements.name'),
+                Tables\Columns\TextColumn::make('gradingPeriod.name'),
             ])
             ->filters([
-                //
+                SelectFilter::make('requirements_id')
+                ->options(function (Livewire $livewire)
+                {
+                    return Requirements::where('subjects_id',$livewire->ownerRecord->id)->pluck('name', 'id');
+                })
+                ->attribute('grading_periods_id')
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
