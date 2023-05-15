@@ -114,6 +114,10 @@ class StudentsResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\Action::make('View Subjects')
+                    ->color('success')
+                    ->icon('heroicon-s-view-list')
+                    ->url(fn (Students $record): string => route('filament.resources.students.subjects', $record))
 
             ])
             ->bulkActions([
@@ -134,6 +138,8 @@ class StudentsResource extends Resource
             'index' => Pages\ListStudents::route('/'),
             'create' => Pages\CreateStudents::route('/create'),
             'edit' => Pages\EditStudents::route('/{record}/edit'),
+            'subjects' => Pages\SubjectsStudents::route('/subjects/{record}'),
+
         ];
     }    
 }

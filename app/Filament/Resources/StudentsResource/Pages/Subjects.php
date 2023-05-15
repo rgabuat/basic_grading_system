@@ -1,39 +1,39 @@
 <?php
 
-namespace App\Filament\Resources\SubjectsResource\Pages;
+namespace App\Filament\Resources\StudentsResource\Pages;
 
-use App\Filament\Resources\SubjectsResource;
+use App\Filament\Resources\StudentsResource;
 use Filament\Resources\Pages\Page;
-use App\Models\Grades;
+use App\Models\Students;
+use App\Models\Subjects;
 use App\Models\GradingPeriod;
 use App\Models\Requirements;
 use App\Models\Activities;
-use App\Models\Students;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\Grades;
+use Illuminate\Support\Facades\Storage;
 
-class StudentSubjects extends Page
+
+
+
+
+class SubjectsStudents extends Page
 {
-    protected static string $resource = SubjectsResource::class;
+    protected static string $resource = StudentsResource::class;
 
-    protected static string $view = 'filament.resources.subjects-resource.pages.student-subjects';
+    protected static string $view = 'filament.resources.students-resource.pages.subjects';
 
-    public $subjectId;
-    public $grades;
+    public function mount($record){
 
- 
-    public function mount($record)
-    {
-        $id=$record;
-        $students = Students::whereHas('courses.subjects', function (Builder $query) use ($record) {
-            $query->where('id', $record);
-        })->get();
+        $students = Students::find($record);
 
-        foreach ($students as $keyS => $student) {
-            $student->gradingPeriod = GradingPeriod::get();
-            $studentTotal = 0;
-        
-            foreach ($student->gradingPeriod as $gp => $grading) {
-                $grading->requirements = Requirements::where('subjects_id', $record)->get();
+        $subjects = Subjects::where('courses_id',$students->courses_id)->get();
+        $this->gradingPeriod = GradingPeriod::get();
+
+        foreach ($subjects as $key => $subject) {
+            $subject->gradingPeriod = GradingPeriod::get();
+
+            foreach ($subject->gradingPeriod as $gp => $grading) {
+                $grading->requirements = Requirements::where('subjects_id', $subject->id)->get();
                 $gradingPeriodTotal = 0;
         
                 foreach ($grading->requirements as $keyrequirements => $requirements) {
@@ -61,25 +61,17 @@ class StudentSubjects extends Page
                     $grading->total = $gradingPeriodTotal;
                 }
         
-                if ($grading->name == 'Prelim' || $grading->name == 'Midterm') {
-                    $percent = 30;
-                } else {
-                    $percent = 40;
-                }
-        
-                $studentTotal += $gradingPeriodTotal ;
+               
             }
-            
-            $student->total = $studentTotal * $percent;
+            $this->subjects=$subjects;
+            // dd($subjects);
         }
-        
-        
-        $this->students=$students;
-        //dd($students);
     }
 
-
-
-
+    public function export()
+    {
+        return Storage::disk('exports')->download('export.csv');
+    }
 
 }
+
