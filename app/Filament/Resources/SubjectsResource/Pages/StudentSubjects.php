@@ -23,6 +23,8 @@ class StudentSubjects extends Page
  
     public function mount($record)
     {
+        
+        
         $id=$record;
         $students = Students::whereHas('courses.subjects', function (Builder $query) use ($record) {
             $query->where('id', $record);

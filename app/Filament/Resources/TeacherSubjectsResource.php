@@ -23,6 +23,7 @@ class TeacherSubjectsResource extends Resource
     protected static ?string $navigationGroup = 'Courses';
     protected static ?int $navigationSort = 3;
     protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Form $form): Form
     {

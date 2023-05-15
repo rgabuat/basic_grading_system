@@ -3,12 +3,14 @@
 namespace App\Filament\Resources\SubjectsResource\RelationManagers;
 
 use Filament\Forms;
-use Filament\Resources\Form;
-use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
 use Filament\Tables;
+use App\Models\Requirements;
+use Filament\Resources\Form;
+use Filament\Resources\Table;
+use Livewire\Component as Livewire;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\RelationManagers\RelationManager;
 
 class RequirementsRelationManager extends RelationManager
 {
@@ -24,6 +26,26 @@ class RequirementsRelationManager extends RelationManager
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('percentage')
+                    ->lte(function (callable $get)
+                        {
+                            
+                                $current = $get('percentage');
+                                $total = 0;
+
+                                $requirements = Requirements::where('subjects_id',2)->get();
+                                if($requirements->count() > 0)
+                                {
+                                    $subval = $requirements->sum('percentage');
+                                    $total = $subval;
+                                }
+                                
+                                $val = $current + $total;
+                                if($val > 100)
+                                {
+                                    return 100;
+                                }        
+                        })
+                    ->numeric()
                     ->required()
                     ->maxLength(255),
             ]);
@@ -33,8 +55,12 @@ class RequirementsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('percentage'),
+                Tables\Columns\TextColumn::make('name')
+                        ->searchable()
+                        ->sortable(),
+                Tables\Columns\TextColumn::make('percentage')
+                        ->searchable()
+                        ->sortable(),
             ])
             ->filters([
                 //

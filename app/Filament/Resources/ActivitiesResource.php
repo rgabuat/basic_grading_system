@@ -6,6 +6,7 @@ use App\Filament\Resources\ActivitiesResource\Pages;
 use App\Filament\Resources\ActivitiesResource\RelationManagers;
 use App\Models\Activities;
 use App\Models\User;
+use App\Models\Grades;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ActivitiesResource extends Resource
 {
     protected static ?string $model = Activities::class;
-
+    protected static bool $shouldRegisterNavigation = false;
     protected static ?string $navigationIcon = 'heroicon-o-bookmark';
 
     public static function form(Form $form): Form
