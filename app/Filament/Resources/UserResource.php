@@ -62,9 +62,6 @@ class UserResource extends Resource
                     ->relationship('roles','name')
                     ->required()
                     ->preload(),
-                    Fieldset::make('Family Members')
-                    ->schema([
-                    ])->relationship("student"),
             ]);
 
             

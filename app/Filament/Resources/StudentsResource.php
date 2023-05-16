@@ -53,11 +53,11 @@ class StudentsResource extends Resource
                         ])->columns(3),
                         Forms\Components\Fieldset::make('Student Information')
                             ->schema([
-                            Forms\Components\TextInput::make('user.name')
+                            Forms\Components\TextInput::make('fname')
                                 ->label('First Name')
                                 ->required()
                                 ->maxLength(255),
-                            Forms\Components\TextInput::make('user.lname')
+                            Forms\Components\TextInput::make('lname')
                                 ->label('Last Name')
                                 ->required()
                                 ->maxLength(255),
@@ -112,11 +112,12 @@ class StudentsResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.full_name')->label('Fullname'),
-                Tables\Columns\TextColumn::make('user.email'),
-                Tables\Columns\TextColumn::make('user.created_at')
+                Tables\Columns\TextColumn::make('fname')->label('Firstname'),
+                Tables\Columns\TextColumn::make('lname')->label('Lastname'),
+                Tables\Columns\TextColumn::make('email'),
+                Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(),
-                Tables\Columns\TextColumn::make('user.updated_at')
+                Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime(),
             ])
             ->filters([
@@ -153,17 +154,17 @@ class StudentsResource extends Resource
         ];
     }    
     
-    public static function getEloquentQuery(): Builder 
-    {
-        $query = parent::getEloquentQuery();
+    // public static function getEloquentQuery(): Builder 
+    // {
+    //     $query = parent::getEloquentQuery();
 
-        if (Auth::check() && Auth::user()->hasRole('admin')) {
-            // The user has the admin role
-        } else {
-            $query->where('user_id', auth()->user()->id);
-        }
-        return $query;
-    }
+    //     if (Auth::check() && Auth::user()->hasRole('admin')) {
+    //         // The user has the admin role
+    //     } else {
+    //         $query->where('user_id', auth()->user()->id);
+    //     }
+    //     return $query;
+    // }
     
     public function getTableContent(): ?View
     {
