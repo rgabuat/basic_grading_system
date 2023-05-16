@@ -37,37 +37,26 @@ class GradesRelationManager extends RelationManager
                             ->afterStateUpdated(fn(callable $set) => $set('activity_id',null)),
                 Forms\Components\Select::make('activity_id')
                             ->label('Activities')
-                            ->options(function (callable $get){
-                                
-                              
-                                        $student = Students::find($get('students_id'));
-                                       
+                            ->options(function (callable $get, Livewire $livewire){
+                                $student = Students::find($get('students_id'));
                                         if($student)
                                         {
-                                            // function(Livewire $livewire)
-                                            // {
-                                                // $sid = $livewire->ownerRecord->id;
-                                                return Activities::whereNotIn('id',function($query) use ($student) {
+                                                return Activities::whereNotIn('id',function($query) use ($student,$livewire) {
                                                     $query->select('activity_id')
                                                         ->from('grades')
-                                                        ->where('subjects_id',1)
+                                                        ->where('subjects_id',$livewire->ownerRecord->id)
                                                         ->where('students_id',$student->id);
-                                                })->where('subjects_id',1)->pluck('name','id');
-                                        //     };
+                                                })->where('subjects_id',$livewire->ownerRecord->id)->pluck('name','id');
                                         }
                                         else 
                                         {
-   
-                                            return Activities::where('subjects_id',1)->pluck('name', 'id');
+                                            return Activities::where('subjects_id',$livewire->ownerRecord->id)->pluck('name', 'id');
                                         }
-                                   
-
-                                      
                                 })
                                 ->reactive()
                                 ->afterStateUpdated(fn(callable $set) => $set('score',null)),
                 Forms\Components\TextInput::make('score')
-                            ->lte(function (callable $get)
+                            ->maxValue(function (callable $get)
                                 {
                                     $activity = Activities::find($get('activity_id'));
 
@@ -75,10 +64,7 @@ class GradesRelationManager extends RelationManager
                                     {
                                         return $activity->total;
                                     }
-                                    else 
-                                    {
-                                         return '0';
-                                    }
+                                   
                                     
                                 }
                             )
