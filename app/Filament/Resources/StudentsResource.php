@@ -154,17 +154,17 @@ class StudentsResource extends Resource
         ];
     }    
     
-    // public static function getEloquentQuery(): Builder 
-    // {
-    //     $query = parent::getEloquentQuery();
+    public static function getEloquentQuery(): Builder 
+    {
+        $query = parent::getEloquentQuery();
 
-    //     if (Auth::check() && Auth::user()->hasRole('admin')) {
-    //         // The user has the admin role
-    //     } else {
-    //         $query->where('user_id', auth()->user()->id);
-    //     }
-    //     return $query;
-    // }
+        if (Auth::check() && Auth::user()->hasRole('admin')) {
+            // The user has the admin role
+        } else {
+            $query->where('email', auth()->user()->email);
+        }
+        return $query;
+    }
     
     public function getTableContent(): ?View
     {
