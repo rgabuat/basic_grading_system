@@ -5,7 +5,7 @@
  
   @if (config('filament.layout.footer.should_show_logo'))
     <a
-      href="https://filamentphp.com"
+      href="{{ env('APP_URL') }}/admin"
       target="_blank"
       rel="noopener noreferrer"
       class="text-gray-300 transition hover:text-primary-500"

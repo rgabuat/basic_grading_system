@@ -11,9 +11,11 @@ use App\Models\Requirements;
 use App\Models\Activities;
 use App\Models\Grades;
 use Illuminate\Support\Facades\Storage;
-
-
-
+use Mail;
+use App\Mail\DemoMail;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\EmailSentNotification;
+use Illuminate\Support\Facades\Auth;
 
 
 class SubjectsStudents extends Page
@@ -22,10 +24,10 @@ class SubjectsStudents extends Page
 
     protected static string $view = 'filament.resources.students-resource.pages.subjects';
 
-    
     public function mount($record){
 
         $students = Students::find($record);
+        $this->record = $record;
 
         $subjects = Subjects::where('courses_id',$students->courses_id)->get();
         $this->gradingPeriod = GradingPeriod::get();
@@ -69,9 +71,91 @@ class SubjectsStudents extends Page
         }
     }
 
-    public function export()
+    public function sendEmail()
     {
-        return Storage::disk('exports')->download('export.csv');
+        $this->loading = true;
+        $students = Students::find($this->record);
+
+        $subjects = Subjects::where('courses_id', $students->courses_id)->get();
+
+        $table = '<table>';
+$table .= '<thead><tr><th>Subject</th>';
+
+if (!is_null($subjects)) {
+    $gradingPeriods = GradingPeriod::get();
+    foreach ($gradingPeriods as $grading) {
+        $table .= '<th>' . $grading->name . '</th>';
+    }
+
+    $table .= '<th>Final Grade</th>';
+    $table .= '<th>Remarks</th>';
+    $table .= '</tr></thead><tbody>';
+
+    foreach ($subjects as $subject) {
+        $table .= '<tr>';
+        $table .= '<td>' . $subject->name . '</td>';
+
+        $finalGrade = 0;
+
+        foreach ($gradingPeriods as $grading) {
+            $requirements = Requirements::where('subjects_id', $subject->id)->get();
+            $gradingPeriodTotal = 0;
+
+            foreach ($requirements as $requirements) {
+                $requirementsTotal = 0;
+                $requirementsScore = 0;
+                $requirementsPercentage = 0;
+                $activities = Activities::where('requirements_id', $requirements->id)
+                    ->where('grading_periods_id', $grading->id)
+                    ->get();
+
+                foreach ($activities as $activities) {
+                    $requirementsTotal += $activities->total;
+
+                    $grades = Grades::where('activity_id', $activities->id)->get();
+
+                    foreach ($grades as $grades) {
+                        $requirementsScore += $grades->score;
+                    }
+                }
+
+                $requirementsPercentage = ($requirementsScore / $requirementsTotal) * ($requirements->percentage / 100);
+                $gradingPeriodTotal += $requirementsPercentage;
+            }
+
+            $table .= '<td>' . ($gradingPeriodTotal * 100) . '</td>';
+
+            if ($grading->name == 'Finals') {
+                $finalGrade += ($gradingPeriodTotal * 100) * 0.4; // Finals weight is 40%
+            } else {
+                $finalGrade += ($gradingPeriodTotal * 100) * 0.3; // Prelim and Midterm weight is 30% each
+            }
+        }
+
+        $table .= '<td>' . $finalGrade . '</td>';
+        $table .= '<td>' . ($finalGrade > 75 ? 'Passed' : 'Failed') . '</td>';
+
+        $table .= '</tr>';
+    }
+
+    $table .= '</tbody></table>';
+
+    // Output or send the $table variable as needed
+    echo $table;
+} else {
+    // Handle the case when $subjects is null
+    echo 'No subjects found.';
+}
+
+        $mailData = [
+            'title' => 'Student Grades',
+            'body' => $table,
+        ];
+
+        Mail::to($students->parent_email)->send(new DemoMail($mailData));
+
+        session()->flash('success', 'Email sent successfully');
+        $this->loading = false;
     }
 
 }
