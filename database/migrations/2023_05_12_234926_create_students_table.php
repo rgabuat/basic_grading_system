@@ -16,12 +16,10 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('fname');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('courses_id');
             $table->unsignedBigInteger('semester_id');
             $table->unsignedBigInteger('year_level_id');
-            $table->string('lname');
-            $table->string('mname')->nullable();
             $table->string('gender');
             $table->string('dob');
             $table->string('email');
@@ -31,9 +29,9 @@ return new class extends Migration
             $table->string('parent_email');
             $table->string('parent_address');
             $table->string('parent_phone_number');
-            $table->string('full_name')->virtualAs('concat(fname, \' \', lname)');
 
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('courses_id')->references('id')->on('courses')->onDelete('cascade');
             $table->foreign('semester_id')->references('id')->on('semesters')->onDelete('cascade');
             $table->foreign('year_level_id')->references('id')->on('year_levels')->onDelete('cascade');

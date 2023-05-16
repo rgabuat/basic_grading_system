@@ -2,25 +2,36 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\StudentsResource\Pages;
-use App\Filament\Resources\StudentsResource\RelationManagers;
-use App\Models\Students;
-use App\Models\Courses;
-use App\Models\Year_levels;
-use App\Models\Semesters;
 use Filament\Forms;
-use Filament\Resources\Form;
-use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use App\Models\User;
 use Filament\Tables;
+use App\Models\Courses;
+use App\Models\Students;
+use App\Models\Semesters;
+use App\Models\Year_levels;
+use Filament\Resources\Form;
+use Filament\Resources\Table;
+use Filament\Resources\Resource;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\StudentsResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\StudentsResource\RelationManagers;
 
 class StudentsResource extends Resource
 {
     protected static ?string $model = Students::class;
-
+    protected static ?string $modelLabel = 'Students';
+    protected static ?string $slug = 'students'; 
     protected static ?string $navigationIcon = 'heroicon-o-users';
+
+    protected function handleRecordCreation(array $data): Model
+    {
+        $record =  static::getModel()::create($data);
+        $record->student()->create($data['courses_id']);
+
+        return $record;
+    }
 
     public static function form(Form $form): Form
     {
@@ -42,11 +53,11 @@ class StudentsResource extends Resource
                         ])->columns(3),
                         Forms\Components\Fieldset::make('Student Information')
                             ->schema([
-                            Forms\Components\TextInput::make('fname')
+                            Forms\Components\TextInput::make('user.name')
                                 ->label('First Name')
                                 ->required()
                                 ->maxLength(255),
-                            Forms\Components\TextInput::make('lname')
+                            Forms\Components\TextInput::make('user.lname')
                                 ->label('Last Name')
                                 ->required()
                                 ->maxLength(255),
@@ -101,12 +112,11 @@ class StudentsResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('lname')->label('Last Name'),
-                Tables\Columns\TextColumn::make('fname')->label('First Name'),
-                Tables\Columns\TextColumn::make('email'),
-                Tables\Columns\TextColumn::make('created_at')
+                Tables\Columns\TextColumn::make('user.full_name')->label('Fullname'),
+                Tables\Columns\TextColumn::make('user.email'),
+                Tables\Columns\TextColumn::make('user.created_at')
                     ->dateTime(),
-                Tables\Columns\TextColumn::make('updated_at')
+                Tables\Columns\TextColumn::make('user.updated_at')
                     ->dateTime(),
             ])
             ->filters([
@@ -142,4 +152,21 @@ class StudentsResource extends Resource
 
         ];
     }    
+    
+    public static function getEloquentQuery(): Builder 
+    {
+        $query = parent::getEloquentQuery();
+
+        if (Auth::check() && Auth::user()->hasRole('admin')) {
+            // The user has the admin role
+        } else {
+            $query->where('user_id', auth()->user()->id);
+        }
+        return $query;
+    }
+    
+    public function getTableContent(): ?View
+    {
+        return view('filament.resources.students-resource.pages.subjects');
+    }
 }

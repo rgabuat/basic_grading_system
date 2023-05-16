@@ -2,22 +2,23 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
-use App\Models\User;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use Filament\Forms;
-use Filament\Resources\Form;
-use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use App\Models\User;
 use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Pages\Page;
+use Filament\Resources\Form;
+use Filament\Resources\Table;
+use Filament\Resources\Resource;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Support\Facades\Hash;
-use Filament\Pages\Page;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\UserResource\Pages;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\UserResource\RelationManagers;
 
 class UserResource extends Resource
 {
@@ -55,17 +56,18 @@ class UserResource extends Resource
                     ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                     ->dehydrated(fn ($state) => filled($state))
                     ->required(fn (Page $livewire) => ($livewire instanceof CreateUser)),
-                    Forms\Components\Select::make('roles')
+                Forms\Components\Select::make('roles')
                     ->multiple()
                     ->label('Role')
                     ->relationship('roles','name')
-                    ->required(),
-                // Forms\Components\Select::make('roles')
-                // ->label('Role')
-                // ->options(Role::all()->pluck('name', 'id'))
-                // ->searchable()
-
+                    ->required()
+                    ->preload(),
+                    Fieldset::make('Family Members')
+                    ->schema([
+                    ])->relationship("student"),
             ]);
+
+            
     }
 
     public static function table(Table $table): Table
@@ -131,4 +133,6 @@ class UserResource extends Resource
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }    
+
+
 }

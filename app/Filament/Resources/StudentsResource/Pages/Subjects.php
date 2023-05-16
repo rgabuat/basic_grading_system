@@ -22,6 +22,7 @@ class SubjectsStudents extends Page
 
     protected static string $view = 'filament.resources.students-resource.pages.subjects';
 
+    
     public function mount($record){
 
         $students = Students::find($record);
@@ -74,4 +75,5 @@ class SubjectsStudents extends Page
     }
 
 }
+
 
