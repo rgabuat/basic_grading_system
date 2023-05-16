@@ -5,12 +5,18 @@
         {{ session('message') }}
     </div>
 @endif
-    <button wire:click="sendEmail" wire:loading.attr="disabled" class="px-4 py-2 mt-4 text-sm font-medium text-white bg-gray-500 hover:bg-gray-600 rounded-md">
+
+ @if (Auth::check() && Auth::user()->hasRole('admin')) 
+        <button wire:click="sendEmail" wire:loading.attr="disabled" class="px-4 py-2 mt-4 text-sm font-medium text-white bg-gray-500 hover:bg-gray-600 rounded-md">
     <span wire:loading wire:target="sendEmail" class="mr-2">
         <i class="fa fa-spinner fa-spin"></i>
     </span>
     Send Email
 </button>
+ @else 
+           
+@endif
+    
 <table class="w-full border-collapse border border-gray-400">
     <thead>
         <tr>
