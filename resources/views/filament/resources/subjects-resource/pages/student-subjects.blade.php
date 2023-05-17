@@ -4,15 +4,14 @@
     <thead>
         <tr>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b bg-gray-50">Student</th>
-             @foreach ($students as $grade)
-                @foreach($grade->gradingPeriod as $key => $gradingPeriod)
+          
+                @foreach($grading as $key => $gradingPeriod)
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b bg-gray-50">{{$gradingPeriod->name}}</th>
                 @endforeach
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b bg-gray-50">Final Grade</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b bg-gray-50">Remarks</th>
 
 
-            @endforeach
 
 
         </tr>

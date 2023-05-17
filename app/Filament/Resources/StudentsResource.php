@@ -159,8 +159,13 @@ class StudentsResource extends Resource
         $query = parent::getEloquentQuery();
 
         if (Auth::check() && Auth::user()->hasRole('admin')) {
-            // The user has the admin role
-        } else {
+          
+        } else if (Auth::check() && Auth::user()->hasRole('teacher')){
+         
+
+        }else
+        
+        {
             $query->where('email', auth()->user()->email);
         }
         return $query;

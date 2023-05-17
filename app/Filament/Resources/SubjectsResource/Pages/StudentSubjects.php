@@ -19,13 +19,14 @@ class StudentSubjects extends Page
 
     public $subjectId;
     public $grades;
-
+    public $grading;
  
     public function mount($record)
     {
         
         
         $id=$record;
+        $this->grading = GradingPeriod::get();
         $students = Students::whereHas('courses.subjects', function (Builder $query) use ($record) {
             $query->where('id', $record);
         })->get();
@@ -48,7 +49,7 @@ class StudentSubjects extends Page
                         $requirementsTotal += $activities->total;
                         $requirements->total = $requirementsTotal;
         
-                        $activities->grades = Grades::where('activity_id', $activities->id)->get();
+                        $activities->grades = Grades::where('activity_id', $activities->id)->where('students_id', $student->id)->get();
         
                         foreach ($activities->grades as $key => $grades) {
                             $activities->score = $grades->score;

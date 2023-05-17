@@ -49,7 +49,7 @@ class SubjectsStudents extends Page
                         $requirementsTotal += $activities->total;
                         $requirements->total = $requirementsTotal;
         
-                        $activities->grades = Grades::where('activity_id', $activities->id)->get();
+                        $activities->grades = Grades::where('activity_id', $activities->id)->where('students_id', $record)->where('subjects_id', $subject->id)->get();
         
                         foreach ($activities->grades as $key => $grades) {
                             $activities->score = $grades->score;
@@ -79,73 +79,78 @@ class SubjectsStudents extends Page
         $subjects = Subjects::where('courses_id', $students->courses_id)->get();
 
         $table = '<table>';
-$table .= '<thead><tr><th>Subject</th>';
+        $table .= '<thead><tr><th>Subject</th>';
 
-if (!is_null($subjects)) {
-    $gradingPeriods = GradingPeriod::get();
-    foreach ($gradingPeriods as $grading) {
-        $table .= '<th>' . $grading->name . '</th>';
-    }
+        if (!is_null($subjects)) {
+            $gradingPeriods = GradingPeriod::get();
+            foreach ($gradingPeriods as $grading) {
+                $table .= '<th>' . $grading->name . '</th>';
+            }
 
-    $table .= '<th>Final Grade</th>';
-    $table .= '<th>Remarks</th>';
-    $table .= '</tr></thead><tbody>';
+            $table .= '<th>Final Grade</th>';
+            $table .= '<th>Remarks</th>';
+            $table .= '</tr></thead><tbody>';
 
-    foreach ($subjects as $subject) {
-        $table .= '<tr>';
-        $table .= '<td>' . $subject->name . '</td>';
+            foreach ($subjects as $subject) {
+                $table .= '<tr>';
+                $table .= '<td>' . $subject->name . '</td>';
 
-        $finalGrade = 0;
+                $finalGrade = 0;
 
-        foreach ($gradingPeriods as $grading) {
-            $requirements = Requirements::where('subjects_id', $subject->id)->get();
-            $gradingPeriodTotal = 0;
+                foreach ($gradingPeriods as $grading) {
+                    $requirements = Requirements::where('subjects_id', $subject->id)->get();
+                    $gradingPeriodTotal = 0;
 
-            foreach ($requirements as $requirements) {
-                $requirementsTotal = 0;
-                $requirementsScore = 0;
-                $requirementsPercentage = 0;
-                $activities = Activities::where('requirements_id', $requirements->id)
-                    ->where('grading_periods_id', $grading->id)
-                    ->get();
+                    foreach ($requirements as $requirements) {
+                        $requirementsTotal = 0;
+                        $requirementsScore = 0;
+                        $requirementsPercentage = 0;
+                        $activities = Activities::where('requirements_id', $requirements->id)
+                            ->where('grading_periods_id', $grading->id)
+                            ->get();
 
-                foreach ($activities as $activities) {
-                    $requirementsTotal += $activities->total;
+                        foreach ($activities as $activities) {
+                            $requirementsTotal += $activities->total;
 
-                    $grades = Grades::where('activity_id', $activities->id)->get();
+                            $grades = Grades::where('activity_id', $activities->id)->where('students_id', $students->id)->where('subjects_id', $subject->id)->get();
 
-                    foreach ($grades as $grades) {
-                        $requirementsScore += $grades->score;
+                            foreach ($grades as $grades) {
+                                $requirementsScore += $grades->score;
+                            }
+                        }
+
+                        if ($requirementsTotal > 0) {
+                            $requirementsPercentage = ($requirementsScore / $requirementsTotal) * ($requirements->percentage / 100);
+                        } else {
+                            $requirementsPercentage = 0; // Assign 0 if requirementsTotal is 0 to avoid division by zero
+                        }
+        
+                        $gradingPeriodTotal += $requirementsPercentage;
+                    }
+
+                    $table .= '<td>' . ($gradingPeriodTotal * 100) . '</td>';
+
+                    if ($grading->name == 'Finals') {
+                        $finalGrade += ($gradingPeriodTotal * 100) * 0.4; // Finals weight is 40%
+                    } else {
+                        $finalGrade += ($gradingPeriodTotal * 100) * 0.3; // Prelim and Midterm weight is 30% each
                     }
                 }
 
-                $requirementsPercentage = ($requirementsScore / $requirementsTotal) * ($requirements->percentage / 100);
-                $gradingPeriodTotal += $requirementsPercentage;
+                $table .= '<td>' . $finalGrade . '</td>';
+                $table .= '<td>' . ($finalGrade > 75 ? 'Passed' : 'Failed') . '</td>';
+
+                $table .= '</tr>';
             }
 
-            $table .= '<td>' . ($gradingPeriodTotal * 100) . '</td>';
+            $table .= '</tbody></table>';
 
-            if ($grading->name == 'Finals') {
-                $finalGrade += ($gradingPeriodTotal * 100) * 0.4; // Finals weight is 40%
-            } else {
-                $finalGrade += ($gradingPeriodTotal * 100) * 0.3; // Prelim and Midterm weight is 30% each
-            }
+            // Output or send the $table variable as needed
+            echo $table;
+        } else {
+            // Handle the case when $subjects is null
+            echo 'No subjects found.';
         }
-
-        $table .= '<td>' . $finalGrade . '</td>';
-        $table .= '<td>' . ($finalGrade > 75 ? 'Passed' : 'Failed') . '</td>';
-
-        $table .= '</tr>';
-    }
-
-    $table .= '</tbody></table>';
-
-    // Output or send the $table variable as needed
-    echo $table;
-} else {
-    // Handle the case when $subjects is null
-    echo 'No subjects found.';
-}
 
         $mailData = [
             'title' => 'Student Grades',
