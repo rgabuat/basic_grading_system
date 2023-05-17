@@ -18,7 +18,7 @@
     </thead>
     <tbody>
         @foreach ($students as $grade)
-    <tr class="@if($loop->odd) bg-gray-100 @endif">
+    <tr class="bg-gray-100 ">
         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-b">{{$grade->fname}} {{$grade->lname}}</td>
         @php
             $finalGrade = 0;
