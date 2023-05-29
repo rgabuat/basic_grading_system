@@ -14,7 +14,7 @@ class CoursesPolicy
     public function viewAny(User $user): bool
     {
         //
-        return $user->hasAnyRole(['super-admin','admin','teacher']);
+        return $user->hasAnyRole(['super-admin','admin']);
     }
 
     /**
@@ -23,7 +23,7 @@ class CoursesPolicy
     public function view(User $user): bool
     {
         //
-        return $user->hasAnyRole(['super-admin','admin','teacher']);
+        return $user->hasAnyRole(['super-admin','admin',]);
     }
 
     /**
@@ -41,7 +41,7 @@ class CoursesPolicy
     public function update(User $user): bool
     {
         //
-        return $user->hasAnyRole(['super-admin','admin','teacher']);
+        return $user->hasAnyRole(['super-admin','admin']);
     }
 
     /**

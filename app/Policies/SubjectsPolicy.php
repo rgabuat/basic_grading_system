@@ -32,7 +32,7 @@ class SubjectsPolicy
     public function create(User $user): bool
     {
         //
-        return $user->hasAnyRole(['super-admin','admin','teacher']);
+        return $user->hasAnyRole(['super-admin','admin']);
     }
 
     /**
@@ -41,7 +41,7 @@ class SubjectsPolicy
     public function update(User $user): bool
     {
         //
-        return $user->hasAnyRole(['super-admin','admin','teacher']);
+        return $user->hasAnyRole(['super-admin','admin']);
     }
 
     /**
@@ -50,7 +50,7 @@ class SubjectsPolicy
     public function delete(User $user): bool
     {
         //
-        return $user->hasAnyRole(['super-admin','admin','teacher']);
+        return $user->hasAnyRole(['super-admin','admin']);
     }
 
     /**

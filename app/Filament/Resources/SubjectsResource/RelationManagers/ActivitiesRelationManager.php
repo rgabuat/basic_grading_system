@@ -59,10 +59,10 @@ class ActivitiesRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('total'),
-                Tables\Columns\TextColumn::make('requirements.name'),
-                Tables\Columns\TextColumn::make('gradingPeriod.name'),
+                Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('total')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('requirements.name')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('gradingPeriod.name')->searchable()->sortable(),
             ])
             ->filters([
                 SelectFilter::make('requirements_id')

@@ -56,13 +56,13 @@ class SubjectsResource extends Resource
 
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('name')->searchable()->sortable()
                     ->label('Subject'),
-                Tables\Columns\TextColumn::make('code')
+                Tables\Columns\TextColumn::make('code')->searchable()->sortable()
                     ->label('Code'),
-                Tables\Columns\TextColumn::make('created_at')
+                Tables\Columns\TextColumn::make('created_at')->searchable()->sortable()
                     ->since(),
-                Tables\Columns\TextColumn::make('updated_at')
+                Tables\Columns\TextColumn::make('updated_at')->searchable()->sortable()
                     ->since(),
             ])
             ->filters([

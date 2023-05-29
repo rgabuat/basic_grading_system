@@ -39,7 +39,7 @@ class DemoMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'This is your Sons/Daughters Grades',
+            subject: "This is your child's Grades",
         );
     }
 

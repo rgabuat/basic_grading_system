@@ -112,12 +112,12 @@ class StudentsResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('fname')->label('Firstname'),
-                Tables\Columns\TextColumn::make('lname')->label('Lastname'),
-                Tables\Columns\TextColumn::make('email'),
-                Tables\Columns\TextColumn::make('created_at')
+                Tables\Columns\TextColumn::make('fname')->label('Firstname')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('lname')->label('Lastname')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('email')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->searchable()->sortable()
                     ->dateTime(),
-                Tables\Columns\TextColumn::make('updated_at')
+                Tables\Columns\TextColumn::make('updated_at')->searchable()->sortable()
                     ->dateTime(),
             ])
             ->filters([
